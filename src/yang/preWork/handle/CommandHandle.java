@@ -2,10 +2,10 @@ package yang.preWork.handle;
 
 import yang.preWork.Command;
 import yang.preWork.impl.CatImpl;
+import yang.preWork.impl.GrepImpl;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +20,7 @@ public class CommandHandle implements InvocationHandler {
     public static void init() {
         CatImpl cat = new CatImpl();
         commandImpls.put("cat",cat);
+        commandImpls.put("grep",new GrepImpl());
     }
 
     public static CommandHandle getHandle(String key){
