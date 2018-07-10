@@ -1,6 +1,7 @@
 package yang.preWork.impl;
 
 import yang.preWork.Command;
+import yang.preWork.Piple;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,6 +39,26 @@ public class GrepImpl implements Command {
                 System.err.println(f + ":" + e);
             }
         }
+    }
+
+    @Override
+    public Piple workWithPiple(String[] parameters, Piple piple) {
+        Piple result = new Piple();
+        compile(parameters[1]);
+        Matcher pm = null; //pattern matcher
+        while (!piple.isEmpty()) {
+            CharSequence curLineCs = piple.getOne();//the current line
+            if (pm == null) {
+                pm = pattern.matcher(curLineCs);
+            } else {
+                pm.reset(curLineCs);
+            }
+            if (pm.find()) {
+                result.putOne(curLineCs.toString());
+                System.out.println(curLineCs);
+            }
+        }
+        return result;
     }
 
     private static void grep(File f) throws IOException {

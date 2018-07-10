@@ -1,6 +1,7 @@
 package yang.preWork.impl;
 
 import yang.preWork.Command;
+import yang.preWork.Piple;
 
 import java.io.*;
 
@@ -30,9 +31,21 @@ public class CatImpl implements Command {
         if (isCopy) {
             dealWithFileCopy(source,target,isLineNumber);
         } else {
-            deal(parameters[parameters.length-1],isLineNumber);
+            deal(parameters[parameters.length-1],isLineNumber,false);
         }
 
+    }
+
+    @Override
+    public Piple workWithPiple(String[] parameters, Piple piple) {
+        boolean isLineNumber = false;
+        for (int i = 0; i < parameters.length; i++) {
+            if (parameters[i].equals("-n")) {
+                isLineNumber = true;
+            }
+        }
+
+        return deal(parameters[parameters.length-1],isLineNumber,true);
     }
 
     private void dealWithFileCopy(String source, String target,boolean isLineNumber) {
@@ -78,10 +91,10 @@ public class CatImpl implements Command {
             }
         }
 
-
     }
 
-    private void deal(String source, boolean isLineNumber) {
+    private Piple deal(String source, boolean isLineNumber, boolean isPiple) {
+        Piple piple = new Piple();
         BufferedReader reader = null;
         String temp;
         int line=1;
@@ -89,19 +102,25 @@ public class CatImpl implements Command {
 
         if (!file.isFile()) {
             System.out.println("no Such File");
-            return;
+            return null;
         }
 
         try {
             reader = new BufferedReader(new FileReader(file));
             while ((temp = reader.readLine())!=null) {
                 if (isLineNumber) {
-                    System.out.println(line + ":    " + temp);
+                    if (!isPiple) {
+                        System.out.println(line + ":    " + temp);
+                    }
                     line++;
                 } else {
-                    System.out.println(temp);
+                    if (!isPiple) {
+                        System.out.println(temp);
+                    }
                 }
+                piple.putOne(temp);
             }
+
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
@@ -114,5 +133,6 @@ public class CatImpl implements Command {
                 }
             }
         }
+        return piple;
     }
 }

@@ -3,6 +3,8 @@ package yang.preWork.handle;
 import yang.preWork.Command;
 import yang.preWork.impl.CatImpl;
 import yang.preWork.impl.GrepImpl;
+import yang.preWork.impl.SortImpl;
+import yang.preWork.impl.WcImpl;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -21,6 +23,8 @@ public class CommandHandle implements InvocationHandler {
         CatImpl cat = new CatImpl();
         commandImpls.put("cat",cat);
         commandImpls.put("grep",new GrepImpl());
+        commandImpls.put("wc",new WcImpl());
+        commandImpls.put("sort",new SortImpl());
     }
 
     public static CommandHandle getHandle(String key){
